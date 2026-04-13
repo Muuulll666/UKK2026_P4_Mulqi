@@ -3,46 +3,49 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-// Root → redirect ke login
+// ===================== ROOT =====================
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('auth.login');
 });
 
-// -------------------------
-// Guest Routes (belum login)
-// -------------------------
+// ===================== AUTH =====================
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'index'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
 });
 
-// -------------------------
-// Logout
-// -------------------------
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// -------------------------
-// Admin Routes
-// -------------------------
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.index');
-    })->name('dashboard');
+// ===================== ADMIN =====================
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('anggota', \App\Http\Controllers\Admin\AnggotaController::class)->except(['create','edit','show']);
+    Route::resource('petugas', \App\Http\Controllers\Admin\PetugasController::class)->except(['create','edit','show']);
+    Route::resource('buku', \App\Http\Controllers\Admin\BukuController::class)->except(['create','edit','show']);
+    Route::resource('kelas', \App\Http\Controllers\Admin\KelasController::class)->except(['create','edit','show']);
+    Route::resource('rak', \App\Http\Controllers\Admin\RakController::class)->except(['create','edit','show']);
+    Route::resource('user', \App\Http\Controllers\Admin\UserController::class)->except(['create','edit','show']);
 });
 
-// -------------------------
-// User Routes
-// -------------------------
-Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.user');
-    })->name('dashboard');
+// ===================== PETUGAS =====================
+Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Petugas\PetugasDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/transaksi', [\App\Http\Controllers\Petugas\TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('/transaksi/{id}', [\App\Http\Controllers\Petugas\TransaksiController::class, 'show'])->name('transaksi.show');
+    Route::patch('/transaksi/{id}/terima', [\App\Http\Controllers\Petugas\TransaksiController::class, 'terima'])->name('transaksi.terima');
+    Route::patch('/transaksi/{id}/tolak', [\App\Http\Controllers\Petugas\TransaksiController::class, 'tolak'])->name('transaksi.tolak');
+    Route::patch('/transaksi/{id}/kembalikan', [\App\Http\Controllers\Petugas\TransaksiController::class, 'kembalikan'])->name('transaksi.kembalikan');
+    Route::patch('/transaksi/{id}/lunasi', [\App\Http\Controllers\Petugas\TransaksiController::class, 'lunasi'])->name('transaksi.lunasi');
+});
+
+// ===================== ANGGOTA =====================
+Route::middleware(['auth', 'anggota'])->prefix('anggota')->name('anggota.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Anggota\AnggotaDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/buku', [\App\Http\Controllers\Anggota\BukuController::class, 'index'])->name('buku.index');
+    Route::get('/buku/{id}', [\App\Http\Controllers\Anggota\BukuController::class, 'show'])->name('buku.show');
+    Route::post('/pinjam', [\App\Http\Controllers\Anggota\PeminjamanController::class, 'store'])->name('pinjam.store');
+    Route::get('/history', [\App\Http\Controllers\Anggota\PeminjamanController::class, 'history'])->name('history');
+    Route::patch('/kembalikan/{id}', [\App\Http\Controllers\Anggota\PeminjamanController::class, 'kembalikan'])->name('kembalikan');
 });

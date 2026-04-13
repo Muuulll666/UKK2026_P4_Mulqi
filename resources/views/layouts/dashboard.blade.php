@@ -68,7 +68,7 @@
                 </div>
                 <div class="nav-right">
                     <ul class="header-right">
-                        <li class="custom-dropdown">
+                        <!-- <li class="custom-dropdown">
                             <div class="translate_wrapper">
                                 <div class="current_lang">
                                     <a class="lang" href="javascript:void(0)">
@@ -82,8 +82,8 @@
                                     <li class="d-block"><a class="lang" href="#" data-value="es"><i class="flag-icon flag-icon-es"></i><div class="lang-txt">Español</div></a></li>
                                 </ul>
                             </div>
-                        </li>
-                        <li class="search d-lg-none d-flex">
+                        </li> -->
+                        <!-- <li class="search d-lg-none d-flex">
                             <a href="javascript:void(0)">
                                 <svg><use href="{{ asset('assets/svg/iconly-sprite.svg#Search') }}"></use></svg>
                             </a>
@@ -257,7 +257,7 @@
                                 </svg>
                                 <h3>15</h3>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="profile-nav custom-dropdown">
                             <div class="user-wrap">
                                 <div class="user-img">
@@ -300,6 +300,8 @@
             </div>
         </header>
 
+        
+
         <!-- Page Body Start -->
         @yield('content')
 
@@ -307,7 +309,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 footer-copyright">
-                        <p class="mb-0">Copyright 2024 © Admiro theme by pixelstrap.</p>
+                        <p class="mb-0"></p>
                     </div>
                     <div class="col-md-6">
                         <p class="float-end mb-0">Hand crafted &amp; made with
