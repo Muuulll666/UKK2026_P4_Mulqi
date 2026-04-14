@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Kelola Anggota')
+@section('title', 'Kelola Pengarang')
 
 @section('content')
 <aside class="page-sidebar">
@@ -75,88 +75,84 @@
     </div>
     <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
 </aside>
-
 <div class="page-body-wrapper">
   <div class="page-body">
     <div class="container-fluid">
       <div class="page-title">
         <div class="row">
-          <div class="col-sm-6 col-12"><h2>Kelola Anggota</h2></div>
+          <div class="col-sm-6 col-12"><h2>Kelola Pengarang</h2></div>
           <div class="col-sm-6 col-12">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="iconly-Home icli svg-color"></i></a></li>
               <li class="breadcrumb-item">Admin</li>
-              <li class="breadcrumb-item active">Anggota</li>
+              <li class="breadcrumb-item active">Pengarang</li>
             </ol>
           </div>
         </div>
       </div>
     </div>
-
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-header card-no-border pb-0">
               <div class="header-top">
-                <h3>Data Anggota</h3>
+                <h3>Data Pengarang</h3>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                  <i class="iconly-Plus icli me-1"></i> Tambah Anggota
+                  <i class="iconly-Plus icli me-1"></i> Tambah Pengarang
                 </button>
               </div>
             </div>
             <div class="card-body pt-0">
               @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                  {{ session('success') }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                <div class="alert alert-success alert-dismissible fade show mt-3">{{ session('success') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
               @endif
               @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                  {{ session('error') }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+                <div class="alert alert-danger alert-dismissible fade show mt-3">{{ session('error') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
               @endif
               <div class="table-responsive theme-scrollbar mt-3">
                 <table class="table display table-bordernone" style="width:100%">
                   <thead>
                     <tr>
                       <th width="50">No</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Kelas</th>
+                      <th>Nama Pengarang</th>
+                      <th>Biografi</th>
+                      <th>Jumlah Buku</th>
                       <th class="text-center" width="120">Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @forelse($anggota as $i => $a)
+                    @forelse($pengarang as $i => $pg)
                     <tr>
                       <td>{{ $i + 1 }}</td>
-                      <td><h6 class="mb-0">{{ $a->user->nama ?? '-' }}</h6></td>
-                      <td>{{ $a->user->email ?? '-' }}</td>
-                      <td>{{ $a->kelas->nama_kelas ?? '-' }}</td>
+                      <td><h6 class="mb-0">{{ $pg->nama }}</h6></td>
+                      <td>
+                        @if($pg->biografi)
+                          <span class="text-truncate d-inline-block" style="max-width:300px;" title="{{ $pg->biografi }}">
+                            {{ Str::limit($pg->biografi, 80) }}
+                          </span>
+                        @else
+                          <span class="text-muted">-</span>
+                        @endif
+                      </td>
+                      <td><span class="badge bg-light-primary text-primary">{{ $pg->buku->count() }} buku</span></td>
                       <td class="text-center">
-                        <button type="button"
-                          class="btn bg-light-warning border-light-warning text-warning btn-sm me-1 btn-edit"
-                          data-id="{{ $a->id }}"
-                          data-nama="{{ $a->user->nama }}"
-                          data-email="{{ $a->user->email }}"
-                          data-kelas="{{ $a->kelas_id }}"
+                        <button type="button" class="btn bg-light-warning border-light-warning text-warning btn-sm me-1 btn-edit"
+                          data-id="{{ $pg->id }}"
+                          data-nama="{{ $pg->nama }}"
+                          data-biografi="{{ $pg->biografi }}"
                           data-bs-toggle="modal" data-bs-target="#modalEdit">
                           <i data-feather="edit-2" style="width:14px;height:14px"></i>
                         </button>
-                        <button type="button"
-                          class="btn bg-light-danger border-light-danger text-danger btn-sm btn-hapus"
-                          data-id="{{ $a->id }}"
-                          data-nama="{{ $a->user->nama }}"
+                        <button type="button" class="btn bg-light-danger border-light-danger text-danger btn-sm btn-hapus"
+                          data-id="{{ $pg->id }}" data-nama="{{ $pg->nama }}"
                           data-bs-toggle="modal" data-bs-target="#modalHapus">
                           <i data-feather="trash-2" style="width:14px;height:14px"></i>
                         </button>
                       </td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="text-center text-muted py-4">Belum ada anggota</td></tr>
+                    <tr><td colspan="5" class="text-center text-muted py-4">Belum ada pengarang</td></tr>
                     @endforelse
                   </tbody>
                 </table>
@@ -170,36 +166,23 @@
 </div>
 
 {{-- Modal Tambah --}}
-<div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
+<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="{{ route('admin.anggota.store') }}" method="POST">
+      <form action="{{ route('admin.pengarang.store') }}" method="POST">
         @csrf
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTambahLabel">Tambah Anggota</h5>
+          <h5 class="modal-title">Tambah Pengarang</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label fw-semibold">Nama <span class="text-danger">*</span></label>
-            <input type="text" name="nama" class="form-control" placeholder="Nama lengkap" required>
+            <label class="form-label fw-semibold">Nama Pengarang <span class="text-danger">*</span></label>
+            <input type="text" name="nama" class="form-control" placeholder="Nama pengarang" required>
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-            <input type="email" name="email" class="form-control" placeholder="email@example.com" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
-            <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Kelas <span class="text-danger">*</span></label>
-            <select name="kelas_id" class="form-select" required>
-              <option value="">-- Pilih Kelas --</option>
-              @foreach($kelas as $k)
-                <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
-              @endforeach
-            </select>
+            <label class="form-label fw-semibold">Biografi</label>
+            <textarea name="biografi" class="form-control" rows="4" placeholder="Biografi singkat pengarang..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -212,37 +195,23 @@
 </div>
 
 {{-- Modal Edit --}}
-<div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditLabel" aria-hidden="true">
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="formEdit" method="POST">
-        @csrf
-        @method('PUT')
+        @csrf @method('PUT')
         <div class="modal-header">
-          <h5 class="modal-title" id="modalEditLabel">Edit Anggota</h5>
+          <h5 class="modal-title">Edit Pengarang</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label fw-semibold">Nama <span class="text-danger">*</span></label>
+            <label class="form-label fw-semibold">Nama Pengarang <span class="text-danger">*</span></label>
             <input type="text" name="nama" id="editNama" class="form-control" required>
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-            <input type="email" name="email" id="editEmail" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Password Baru <small class="text-muted">(kosongkan jika tidak diubah)</small></label>
-            <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter">
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Kelas <span class="text-danger">*</span></label>
-            <select name="kelas_id" id="editKelas" class="form-select" required>
-              <option value="">-- Pilih Kelas --</option>
-              @foreach($kelas as $k)
-                <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
-              @endforeach
-            </select>
+            <label class="form-label fw-semibold">Biografi</label>
+            <textarea name="biografi" id="editBiografi" class="form-control" rows="4"></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -259,14 +228,14 @@
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <form id="formHapus" method="POST">
-        @csrf
-        @method('DELETE')
+        @csrf @method('DELETE')
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title text-danger"><i data-feather="alert-triangle" class="me-1"></i> Hapus Anggota</h5>
+          <h5 class="modal-title text-danger">Hapus Pengarang</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body pt-2">
-          <p class="mb-0">Yakin hapus anggota <strong id="hapusNama"></strong>?</p>
+          <p class="mb-0">Yakin hapus pengarang <strong id="hapusNama"></strong>?</p>
+          <small class="text-muted">Buku yang terkait tidak akan terhapus.</small>
         </div>
         <div class="modal-footer border-0 pt-0">
           <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Batal</button>
@@ -281,18 +250,14 @@
 <script>
   document.querySelectorAll('.btn-edit').forEach(btn => {
     btn.addEventListener('click', function() {
-      const id = this.dataset.id;
-      document.getElementById('formEdit').action = `/admin/anggota/${id}`;
-      document.getElementById('editNama').value  = this.dataset.nama;
-      document.getElementById('editEmail').value = this.dataset.email;
-      document.getElementById('editKelas').value = this.dataset.kelas;
+      document.getElementById('formEdit').action = `/admin/pengarang/${this.dataset.id}`;
+      document.getElementById('editNama').value     = this.dataset.nama;
+      document.getElementById('editBiografi').value = this.dataset.biografi || '';
     });
   });
-
   document.querySelectorAll('.btn-hapus').forEach(btn => {
     btn.addEventListener('click', function() {
-      const id = this.dataset.id;
-      document.getElementById('formHapus').action = `/admin/anggota/${id}`;
+      document.getElementById('formHapus').action = `/admin/pengarang/${this.dataset.id}`;
       document.getElementById('hapusNama').textContent = this.dataset.nama;
     });
   });

@@ -33,13 +33,19 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+            $request->session()->forget('url.intended'); // hapus intended URL lama
 
             // Redirect berdasarkan role
-            if (Auth::user()->role === 'admin') {
-                return redirect()->intended('/admin/dashboard');
+            $role = Auth::user()->role;
+
+            if ($role === 'admin') {
+                return redirect('/admin/dashboard');
+            }
+            if ($role === 'petugas') {
+                return redirect('/petugas/dashboard');
             }
 
-            return redirect()->intended('/dashboard');
+            return redirect('/anggota/dashboard');
         }
 
         return back()->with('loginError', 'Email atau password salah.');
@@ -72,12 +78,12 @@ class AuthController extends Controller
             'nama'     => $request->nama,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'user', // default role saat register
+            'role'     => 'anggota', // default role saat register
         ]);
 
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect('/anggota/dashboard');
     }
 
     // ==================== LOGOUT ====================

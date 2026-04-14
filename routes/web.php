@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 // ===================== ROOT =====================
 Route::get('/', function () {
@@ -18,15 +19,22 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+// ===================== PROFILE (semua role) =====================
+Route::middleware('auth')->group(function () {
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
 // ===================== ADMIN =====================
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('anggota', \App\Http\Controllers\Admin\AnggotaController::class)->except(['create','edit','show']);
-    Route::resource('petugas', \App\Http\Controllers\Admin\PetugasController::class)->except(['create','edit','show']);
-    Route::resource('buku', \App\Http\Controllers\Admin\BukuController::class)->except(['create','edit','show']);
-    Route::resource('kelas', \App\Http\Controllers\Admin\KelasController::class)->except(['create','edit','show']);
+    Route::resource('user', \App\Http\Controllers\Admin\UserController::class);
+    Route::resource('petugas', \App\Http\Controllers\Admin\PetugasController::class);
+    Route::resource('buku', \App\Http\Controllers\Admin\BukuController::class);
+    Route::resource('kelas', \App\Http\Controllers\Admin\KelasController::class);
+    Route::resource('penerbit', \App\Http\Controllers\Admin\PenerbitController::class);
+    Route::resource('pengarang', \App\Http\Controllers\Admin\PengarangController::class);
     Route::resource('rak', \App\Http\Controllers\Admin\RakController::class)->except(['create','edit','show']);
-    Route::resource('user', \App\Http\Controllers\Admin\UserController::class)->except(['create','edit','show']);
 });
 
 // ===================== PETUGAS =====================

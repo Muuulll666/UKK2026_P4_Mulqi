@@ -8,18 +8,69 @@
       <ul class="sidebar-menu" id="simple-bar">
         <li class="sidebar-main-title"><div><h5 class="lan-1 f-w-700 sidebar-title">General</h5></div></li>
         <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
           <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
             <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Home-dashboard"></use></svg>
             <h6>Dashboard</h6>
           </a>
         </li>
         <li class="sidebar-main-title"><div><h5 class="sidebar-title pt-3 f-w-700">Data</h5></div></li>
-         <li class="sidebar-list"><a class="sidebar-link" href="{{ route('admin.anggota.index') }}"><svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Wallet"></use></svg><h6 class="f-w-600">Data Anggota</h6></a></li> 
-        <li class="sidebar-list active"><a class="sidebar-link active" href="{{ route('admin.user.index') }}"><svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Profile"></use></svg><h6 class="f-w-600">Data User</h6></a></li>
-        <li class="sidebar-list"><a class="sidebar-link" href="{{ route('admin.buku.index') }}"><svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Paper-plus"></use></svg><h6 class="f-w-600">Data Buku</h6></a></li>
-        <li class="sidebar-list"><a class="sidebar-link" href="{{ route('admin.kelas.index') }}"><svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Category"></use></svg><h6 class="f-w-600">Data Kelas</h6></a></li>
-         <li class="sidebar-list"><a class="sidebar-link" href="{{ route('admin.rak.index') }}"><svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Folder"></use></svg><h6 class="f-w-600">Data Rak</h6></a></li> 
-        <li class="sidebar-list"><a class="sidebar-link" href="{{ route('admin.petugas.index') }}"><svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#User"></use></svg><h6 class="f-w-600">Data Petugas</h6></a></li>
+        <li class="sidebar-list active">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link active" href="{{ route('admin.anggota.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Wallet"></use></svg>
+            <h6 class="f-w-600">Data Anggota</h6>
+          </a>
+        </li>
+        <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="{{ route('admin.user.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Profile"></use></svg>
+            <h6 class="f-w-600">Data User</h6>
+          </a>
+        </li>
+        <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="{{ route('admin.buku.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Paper-plus"></use></svg>
+            <h6 class="f-w-600">Data Buku</h6>
+          </a>
+        </li>
+        <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="{{ route('admin.kelas.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Category"></use></svg>
+            <h6 class="f-w-600">Data Kelas</h6>
+          </a>
+        </li>
+       <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="{{ route('admin.rak.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Folder"></use></svg>
+            <h6 class="f-w-600">Data Rak</h6>
+          </a>
+        </li>
+        <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="{{ route('admin.petugas.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#User"></use></svg>
+            <h6 class="f-w-600">Data Petugas</h6>
+          </a>
+        </li>
+         <li class="sidebar-list">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link" href="{{ route('admin.penerbit.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Paper"></use></svg>
+            <h6 class="f-w-600">Data Penerbit</h6>
+          </a>
+        </li>
+        <li class="sidebar-list active">
+          <i class="fa-solid fa-thumbtack"></i>
+          <a class="sidebar-link active" href="{{ route('admin.pengarang.index') }}">
+            <svg class="stroke-icon"><use href="https://admin.pixelstrap.net/admiro/assets/svg/iconly-sprite.svg#Edit"></use></svg>
+            <h6 class="f-w-600">Data Pengarang</h6>
+          </a>
+        </li>
       </ul>
     </div>
     <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

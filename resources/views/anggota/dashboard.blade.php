@@ -59,6 +59,39 @@
     <div class="container-fluid default-dashboard">
       <div class="row">
 
+        {{-- Kartu Profil Anggota --}}
+        <div class="col-12 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center gap-3">
+                @if(auth()->user()->foto)
+                  <img src="{{ Storage::url(auth()->user()->foto) }}" alt="foto profil"
+                       class="rounded-circle border" style="width:70px;height:70px;object-fit:cover;">
+                @else
+                  <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center border"
+                       style="width:70px;height:70px;flex-shrink:0;">
+                    <span class="fw-bold text-success fs-4">{{ strtoupper(substr(auth()->user()->nama, 0, 1)) }}</span>
+                  </div>
+                @endif
+                <div class="flex-grow-1">
+                  <h5 class="mb-0 fw-semibold">{{ auth()->user()->nama }}</h5>
+                  <span class="text-muted small">{{ auth()->user()->email }}</span>
+                  <div class="mt-1"><span class="badge bg-light-success text-success">Anggota</span></div>
+                </div>
+                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditProfil">
+                  <i data-feather="edit-2" style="width:14px;height:14px"></i> Edit Profil
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        @if(session('success'))
+          <div class="col-12 mb-3">
+            <div class="alert alert-success alert-dismissible fade show">{{ session('success') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+          </div>
+        @endif
+
         {{-- Stats --}}
         <div class="col-12 mb-3">
           <div class="row g-3">
@@ -173,8 +206,14 @@
               @foreach($recentBooks as $buku)
               <a href="{{ route('anggota.buku.show', $buku->id) }}"
                  class="d-flex align-items-center gap-3 py-2 text-decoration-none {{ !$loop->last ? 'border-bottom' : '' }}">
-                <div class="p-2 rounded bg-info bg-opacity-10 text-info">
-                  <iconify-icon icon="solar:book-2-bold" width="18"></iconify-icon>
+                <div style="width:36px;height:50px;flex-shrink:0;overflow:hidden;border-radius:4px;">
+                  @if($buku->foto)
+                    <img src="{{ Storage::url($buku->foto) }}" style="width:36px;height:50px;object-fit:cover;">
+                  @else
+                    <div class="bg-info bg-opacity-10 d-flex align-items-center justify-content-center w-100 h-100">
+                      <iconify-icon icon="solar:book-2-bold" class="text-info" width="18"></iconify-icon>
+                    </div>
+                  @endif
                 </div>
                 <div class="flex-grow-1" style="min-width:0">
                   <div class="fw-semibold small text-truncate" style="color:var(--body-font-color)">{{ $buku->judul }}</div>
@@ -208,4 +247,85 @@
   </div>
 
 </div>
+
+{{-- Modal Edit Profil --}}
+<div class="modal fade" id="modalEditProfil" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf @method('PUT')
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Profil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {{-- Foto Profil --}}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Foto Profil</label>
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <div class="rounded-circle border overflow-hidden" style="width:70px;height:70px;flex-shrink:0;">
+                @if(auth()->user()->foto)
+                  <img id="profilPreview" src="{{ Storage::url(auth()->user()->foto) }}" style="width:70px;height:70px;object-fit:cover;">
+                @else
+                  <div id="profilPreviewPlaceholder" class="bg-success bg-opacity-10 d-flex align-items-center justify-content-center w-100 h-100">
+                    <span class="fw-bold text-success fs-4">{{ strtoupper(substr(auth()->user()->nama, 0, 1)) }}</span>
+                  </div>
+                  <img id="profilPreview" src="" style="display:none;width:70px;height:70px;object-fit:cover;">
+                @endif
+              </div>
+              <input type="file" name="foto" id="profilFotoInput" class="form-control" accept="image/*">
+            </div>
+            @if(auth()->user()->foto)
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="hapus_foto" id="hapusProfilFoto" value="1">
+              <label class="form-check-label text-danger" for="hapusProfilFoto">Hapus foto profil</label>
+            </div>
+            @endif
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nama <span class="text-danger">*</span></label>
+            <input type="text" name="nama" class="form-control" value="{{ auth()->user()->nama }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+            <input type="email" name="email" class="form-control" value="{{ auth()->user()->email }}" required>
+          </div>
+          <hr>
+          <p class="text-muted small mb-2">Kosongkan jika tidak ingin mengubah password.</p>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password Baru</label>
+            <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Konfirmasi Password</label>
+            <input type="password" name="password_confirmation" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+@push('scripts')
+<script>
+  document.getElementById('profilFotoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.getElementById('profilPreview');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        const ph = document.getElementById('profilPreviewPlaceholder');
+        if (ph) ph.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+@endpush
 @endsection

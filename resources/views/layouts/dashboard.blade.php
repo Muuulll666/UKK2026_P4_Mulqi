@@ -362,6 +362,7 @@
     <script src="{{ asset('assets/js/dashboard/dashboard_1.js') }}"></script>
     <!-- custom script -->
     <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
 
     @stack('scripts')
 </body>
