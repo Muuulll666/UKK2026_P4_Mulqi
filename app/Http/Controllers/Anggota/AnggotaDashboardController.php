@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AnggotaDashboardController extends Controller
 {
+
     public function index()
     {
         $userId = Auth::id();

@@ -10,6 +10,7 @@
     <title>Admiro - Premium Admin Template</title>
     <!-- Favicon icon-->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon"/>
+    
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/font-awesome.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/bootstrap/dist/css/bootstrap.css') }}"/>
